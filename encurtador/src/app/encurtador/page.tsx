@@ -1,11 +1,12 @@
-import Image from 'next/image'
+"use client";
 
-export default function Page({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  return <h1>My Page</h1>;
+import Image from 'next/image'
+import { useSearchParams } from 'next/navigation';
+
+export default function Page() {
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get('search');
+
+  return <h1>My Page{search}</h1>;
 }
