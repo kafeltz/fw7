@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 
-import{ connectDb } from '../../../../../src/db/connect';
+import{ getUrls } from '../../../../db/url';
 
 export async function GET(request: Request, context: { params: { short_id: string }}) {
   const short_id = context.params.short_id;
 
-  await connectDb();
+  const urls = await getUrls();
+
+  console.log(urls);
 
   return NextResponse.json(short_id);
 }
