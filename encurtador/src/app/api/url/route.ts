@@ -15,5 +15,10 @@ export async function POST(request: Request) {
 
   const result = await createUrl(url);
 
-  return NextResponse.json(result);
+  if (result == -1) {
+    return NextResponse.json(null, {status: 409})
+  } else {
+    return NextResponse.json(result);
+  }
+
 }

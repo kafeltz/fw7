@@ -1,4 +1,5 @@
 /** @type {import('@types/pg').Client} */
+/** @type {import('builtins')} */
 
 import { Client } from "pg"
 import {decode, encode} from "../../../coder"
@@ -63,9 +64,14 @@ export const createUrl = async(url: string) : Promise<number> => {
     await client.query('COMMIT')
     await client.end();
     return id;
-  } catch (e) {
+  } catch (e) { // todo: descobrir esse tipo
     await client.query('ROLLBACK');
     await client.end();
-    throw e
+
+    if (e.code == '23505') {
+      return -1;
+    } else {
+      throw e
+    }
   }
 }
