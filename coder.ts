@@ -3,8 +3,8 @@
 const LETRAS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 const BASE = 62;
 
-function encode(number) {
-  const result = [];
+export function encode(number: number) : string {
+  const result: string[] = [];
 
   if (number == 0) {
     return LETRAS[number];
@@ -20,7 +20,7 @@ function encode(number) {
   return result.reverse().join("");
 }
 
-function decode(input) {
+export function decode(input: string) : number {
   const splitted = input.split("");
 
   let output = 0;
@@ -33,8 +33,3 @@ function decode(input) {
   return output;
 }
 
-var x = encode(1001);
-console.log(x);
-
-var y = decode(x);
-console.log(y);

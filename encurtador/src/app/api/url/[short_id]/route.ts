@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 
-import{ getUrls } from '../../../../db/url';
+import{ getUrlByHash } from '../../../../db/url';
 
 export async function GET(request: Request, context: { params: { short_id: string }}) {
   const short_id = context.params.short_id;
 
-  const urls = await getUrls();
+  const url = await getUrlByHash(short_id);
 
-  console.log(urls);
-
-  return NextResponse.json(short_id);
+  return NextResponse.json(url);
 }
