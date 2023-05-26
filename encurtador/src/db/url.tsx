@@ -78,11 +78,11 @@ export const createUrl = async(url: string) : Promise<number> => {
     await client.query('COMMIT')
     await client.end();
     return id;
-  } catch (e) { // todo: descobrir esse tipo
+  } catch (e : any) { // todo: descobrir esse tipo
     await client.query('ROLLBACK');
     await client.end();
 
-    if (e.code == '23505') {
+    if (e['code'] == '23505') {
       return -1;
     } else {
       throw e

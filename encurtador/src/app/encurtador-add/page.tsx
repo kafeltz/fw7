@@ -17,7 +17,7 @@ export default function Example() {
     router.back();
   }
 
-  const handleOnSave = async (e: InputEvent) => {
+  const handleOnSave = async () => {
 
     const body = JSON.stringify({ url: url });
 
