@@ -38,10 +38,7 @@ export default function RootLayout({
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">Encurtador de URLs</h1>
           </div>
         </header>
-
-
-          {children}
-
+        {children}
       </body>
     </html>
   )
