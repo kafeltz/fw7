@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import{ createUrl, getUrls } from '../../../db/url';
+import{ createUrl, getUrls, deleteUrlById } from '../../../db/url';
 
 // TODO: page, limit e offset
 export async function GET (request: Request) {
@@ -11,6 +11,19 @@ export async function GET (request: Request) {
 
 export async function POST(request: Request) {
   const data = await request.json();
+
+  const action = data['action'];
+
+  switch(action) {
+    case "delete":
+      return _delete(data);
+    case "create":
+    default:
+      return _create(data);
+  }
+}
+
+async function _create(data: any) {
   const url = data['url'];
 
   const result = await createUrl(url);
@@ -20,5 +33,12 @@ export async function POST(request: Request) {
   } else {
     return NextResponse.json(result);
   }
+}
 
+async function _delete(data: any) {
+  const id = Number(data['id']);
+
+  const result = await deleteUrlById(id);
+
+  return NextResponse.json(result);
 }

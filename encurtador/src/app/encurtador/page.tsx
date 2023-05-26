@@ -1,5 +1,7 @@
 "use client";
 
+type InputEvent = React.ChangeEvent<HTMLInputElement>;
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -17,12 +19,51 @@ export default function Page() {
     });
   }, []);
 
+  const handleDelete = (e: InputEvent, id: string) => {
+    if (confirm('Deseja realmente apagar esta URL?')) {
+      const body = JSON.stringify({
+        "action": "delete",
+        "id": id
+      });
+
+      const init: RequestInit = {
+        method: 'POST',
+        body: body,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      fetch('/api/url/', init)
+      .then(res => res.json())
+      .then(res => {
+        if (res) {
+          alert('URL removida com sucesso!');
+
+          const urls_copia = urls.filter(x => x['id'] != id)
+          setUrls(urls_copia);
+        } else {
+          alert('URL não foi removida!');
+        }
+      });
+    }
+  }
+
   return (
     <>
-      <button
-        onClick={() => router.push('/encurtador-add')}
-        type="button"
-        className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">Nova URL</button>
+      <div className="flex flex-col justify-center items-center">
+        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+            <div className="overflow-hidden">
+              <button
+                onClick={() => router.push('/encurtador-add')}
+                type="button"
+                className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">Nova URL</button>
+            </div>
+          </div>
+          </div>
+        </div>
+
 
       <div className="flex flex-col justify-center items-center">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -46,11 +87,11 @@ export default function Page() {
                         <td className="whitespace-nowrap px-6 py-4">
                         <button
                           type="button"
+                          onClick={(e) => handleDelete(e, u['id'])}
                           className="inline-block rounded border-2 border-primary-100 px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:border-primary-accent-100 hover:bg-neutral-500 hover:bg-opacity-10 focus:border-primary-accent-100 focus:outline-none focus:ring-0 active:border-primary-accent-200 dark:text-primary-100 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
                           data-te-ripple-init>
                           Remover
                         </button>
-
                         </td>
                       </tr>
                   )))}

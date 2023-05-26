@@ -27,7 +27,7 @@ export const getUrls = async () => {
 export const getUrlByHash = async (hash : string) : Promise<string> => {
   const client = getClient();
   await client.connect();
-  const res = await client.query('SELECT url FROM urls WHERE short_url = $1', [hash]);
+  const res = await client.query('SELECT url FROM urls WHERE short_url = $1;', [hash]);
   await client.end();
   const url = res.rows[0]['url'];
 
@@ -58,7 +58,7 @@ export const createUrl = async(url: string) : Promise<number> => {
 
     const encode_url = encode(id);
 
-    query = 'UPDATE urls SET short_url = $1, updated_at = NOW() WHERE id = $2';
+    query = 'UPDATE urls SET short_url = $1, updated_at = NOW() WHERE id = $2;';
     params = [encode_url, id];
     await client.query(query, params);
     await client.query('COMMIT')
@@ -73,5 +73,22 @@ export const createUrl = async(url: string) : Promise<number> => {
     } else {
       throw e
     }
+  }
+}
+
+export const deleteUrlById = async(id: number) : Promise<boolean> => {
+  const client = getClient();
+
+  try {
+    await client.connect();
+    const query = 'DELETE FROM urls WHERE id = $1;';
+    const params : (number|string)[] = [id];
+    await client.query(query, params);
+    await client.end();
+    return true;
+  }
+  catch(e) {
+    await client.end();
+    return false;
   }
 }

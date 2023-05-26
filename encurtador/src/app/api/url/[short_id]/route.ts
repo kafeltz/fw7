@@ -9,3 +9,4 @@ export async function GET(request: Request, context: { params: { short_id: strin
 
   return NextResponse.json(url);
 }
+
