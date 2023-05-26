@@ -7,6 +7,7 @@ const nextConfig = {
     PGPASSWORD: "postgres",
     PGDATABASE: "postgres",
     PGPORT: 5432,
+    BASE_URL: "http://localhost:3000",
   },
 };
 

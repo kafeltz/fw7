@@ -16,12 +16,26 @@ function getClient() {
   return client;
 }
 
-export const getUrls = async () => {
+export const getUrls = async (page: number, limit: number) => {
   const client = getClient();
+
+  const params : (number|string)[] = [limit, limit*(page-1)];
+
   await client.connect();
-  const res = await client.query('SELECT id, url, short_url, created_at, updated_at FROM urls');
+  const query = 'SELECT id, url, short_url, created_at, updated_at FROM urls LIMIT $1 OFFSET $2';
+  const res = await client.query(query, params);
+
+  const queryTotal = 'SELECT COUNT(*) AS total FROM urls';
+  const resTotal = await client.query(queryTotal);
+
+  const result = {
+    'total': resTotal.rows[0]['total'],
+    'rows': res.rows
+  }
+
   await client.end();
-  return res.rows;
+
+  return result;
 }
 
 export const getUrlByHash = async (hash : string) : Promise<string> => {

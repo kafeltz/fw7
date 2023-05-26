@@ -2,9 +2,13 @@ import { NextResponse } from 'next/server';
 
 import{ createUrl, getUrls, deleteUrlById } from '../../../db/url';
 
-// TODO: page, limit e offset
+// TODO: page, limit
 export async function GET (request: Request) {
-  const result = await getUrls();
+  const { searchParams } = new URL(request.url);
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 5;
+
+  const result = await getUrls(page, limit);
 
   return NextResponse.json(result);
 }
