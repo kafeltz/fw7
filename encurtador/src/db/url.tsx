@@ -2,7 +2,7 @@
 /** @type {import('builtins')} */
 
 import { Client } from "pg"
-import {decode, encode} from "../../../coder"
+import {decode, encode} from "../lib/coder"
 
 function getClient() {
   const client = new Client({

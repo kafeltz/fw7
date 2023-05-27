@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { isValidUrl } from '../../lib/utils';
 
 type InputEvent = React.ChangeEvent<HTMLInputElement>;
 
@@ -18,6 +19,11 @@ export default function Example() {
   }
 
   const handleOnSave = async () => {
+    // validação simples
+    if (!isValidUrl(url)) {
+      alert('URL informada não é válida!');
+      return false;
+    }
 
     const body = JSON.stringify({ url: url });
 
@@ -64,6 +70,7 @@ export default function Example() {
                 className="mt-0 block w-full px-0.5 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-black"
                 placeholder=""
                 value={url}
+                required
                 onChange={handleOnChange}
                 />
             </label>
