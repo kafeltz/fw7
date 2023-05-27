@@ -1,3 +1,4 @@
+// https://www.freecodecamp.org/news/how-to-validate-urls-in-javascript/
 export function isValidUrl(url : string) : boolean {
   try {
     const newUrl = new URL(url);
